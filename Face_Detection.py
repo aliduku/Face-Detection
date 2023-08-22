@@ -3,6 +3,12 @@ import streamlit as st
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
+# Frame placeholder
+frame_placeholder = st.empty()
+
+# Add a "Stop" button and store its state in a variable
+stop_button_pressed = st.button("Stop")
+
 def detect_faces(draw_color, min_neighbors, scale_factor):
     # Convert RGBA color to BGR
     bgr_color = tuple(int(draw_color[i:i+2], 16) for i in (1, 3, 5))[::-1]
@@ -12,6 +18,11 @@ def detect_faces(draw_color, min_neighbors, scale_factor):
     while True:
         # Read the frames from the webcam
         ret, frame = cap.read()
+
+        if not ret:
+            st.write("The video capture has ended.")
+            break
+
         # Convert the frames to grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # Detect the faces using the face cascade classifier
@@ -22,10 +33,10 @@ def detect_faces(draw_color, min_neighbors, scale_factor):
             # Save the frame with detected faces
             cv2.imwrite("detected_faces.jpg", frame)
         
-        # Display the frames
-        cv2.imshow('Face Detection using Viola-Jones Algorithm', frame)
+        # Display the frame using Streamlit's st.image
+        frame_placeholder.image(frame, channels="RGB")
         # Exit the loop when 'q' is pressed
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if cv2.waitKey(1) & 0xFF == ord('q') or stop_button_pressed:
             break
     # Release the webcam and close all windows
     cap.release()
