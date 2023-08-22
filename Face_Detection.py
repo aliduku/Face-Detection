@@ -52,8 +52,7 @@ def app():
     webrtc_ctx = webrtc_streamer(
         key="face-detection",
         video_processor_factory=lambda: FaceDetectionProcessor(draw_color, min_neighbors, scale_factor),
-        rtc_configuration=RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
-    )
+        )
 
     # Add a "Download Frame" button
     if st.button("Capture Frame"):
