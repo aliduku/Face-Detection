@@ -3,18 +3,19 @@ import streamlit as st
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-# Frame placeholder
-frame_placeholder = st.empty()
-
-# Add a "Stop" button and store its state in a variable
-stop_button_pressed = st.button("Stop")
-
 def detect_faces(draw_color, min_neighbors, scale_factor):
     # Convert RGBA color to BGR
     bgr_color = tuple(int(draw_color[i:i+2], 16) for i in (1, 3, 5))[::-1]
 
     # Initialize the webcam
     cap = cv2.VideoCapture(0)
+    
+    # Frame placeholder
+    frame_placeholder = st.empty()
+
+    # Add a "Stop" button and store its state in a variable
+    stop_button_pressed = st.button("Stop")
+
     while True:
         # Read the frames from the webcam
         ret, frame = cap.read()
